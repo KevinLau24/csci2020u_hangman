@@ -1,11 +1,11 @@
-# csci2020u_tictactoe
+# csci2020u_hangman
 
 ## Identification
 
 Group Members: Kevin Lau (100746819), Thinh Le (), Kenneth Tse (), John Tovera () 
 
 ## Project Information
-This program is a server/client based game of tictactoe. Each player will either be "X" or "O". To win one player must get 3 in a row. If all 9 of the board spots are filled and no player has 3 in a row it is a draw.
+This program is a server/client based game of hangman. Each player will take turns to guess letters or the word. If the players do not guess the word before the hanging man is drawn then they lose. If they are able to guess the word before they are out of chances then they win.
 
 ## How to run
 In order to successfully run the program, here is a step-by-step process:
