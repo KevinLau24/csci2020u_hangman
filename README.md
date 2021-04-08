@@ -11,7 +11,7 @@ This program is a server/client based game of hangman. Each player will take tur
 In order to successfully run the program, here is a step-by-step process:
 1. Set-up JavaFX: https://gluonhq.com/products/javafx/
 2. IntelliJ IDEA IDE: https://www.jetbrains.com/idea/download/ (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ)
-3. Git clone this repository: https://github.com/KevinLau24/csci2020u_tictactoe
+3. Git clone this repository: https://github.com/KevinLau24/csci2020u_hangman
 4. 
 
 ## Other resources
