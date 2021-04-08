@@ -2,7 +2,7 @@
 
 ## Identification
 
-Group Members: Kevin Lau (100746819), Thinh Le (), Kenneth Tse (), John Tovera () 
+Group Members: Kevin Lau (100746819), Thinh Le (), Kenneth Tse (100746775), John Tovera () 
 
 ## Project Information
 This program is a server/client based game of hangman. Each player will take turns to guess letters or the word. If the players do not guess the word before the hanging man is drawn then they lose. If they are able to guess the word before they are out of chances then they win.
