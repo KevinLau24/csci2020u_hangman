@@ -1,7 +1,14 @@
-package hangman;
+package org.hangman;
+
+import com.github.dhiraj072.randomwordgenerator.RandomWordGenerator;
 
 public class Game {
-    public static void main(String[] args) {
 
+    public Game() {
+
+    }
+
+    public void start() {
+        String randomWord = RandomWordGenerator.getRandomWord();
     }
 }

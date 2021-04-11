@@ -58,12 +58,12 @@ public class Main extends Application {
         hostGrid.setVgap(10);
         hostGrid.setPadding(new Insets(10,10,10,10));
 
-        Label ipLb1 = new Label("IP Address: ");
         Label portLb1 = new Label("Port: ");
+        Label numPlayerLb = new Label("Number of players: ");
         Label statusLb1 = new Label();
 
-        TextField ipTf1 = new TextField();
-        ipTf1.setPromptText("IP Address");
+        ComboBox numPlayerCb = new ComboBox();
+        numPlayerCb.getItems().addAll(1, 2, 3, 4);
         TextField portTf1 = new TextField();
         portTf1.setPromptText("Numbers only");
 
@@ -87,10 +87,10 @@ public class Main extends Application {
         innerGrid1.setAlignment(Pos.TOP_CENTER);
         innerGrid1.setHgap(10);
         innerGrid1.setVgap(10);
-        innerGrid1.add(ipLb1,0,0);
-        innerGrid1.add(ipTf1,1,0);
-        innerGrid1.add(portLb1,0,1);
-        innerGrid1.add(portTf1, 1, 1);
+        innerGrid1.add(portLb1,0,0);
+        innerGrid1.add(portTf1, 1, 0);
+        innerGrid1.add(numPlayerLb,0,1);
+        innerGrid1.add(numPlayerCb,1,1);
         innerGrid1.add(hBoxServerBtn,0,2,2,1);
         innerGrid1.add(hBoxStatusLb1,0,3,2,1);
 
@@ -104,19 +104,21 @@ public class Main extends Application {
             backBtn1.setDisable(true);
             startBtn.setDisable(true);
             stopBtn.setDisable(false);
-            ipTf1.setEditable(false);
-            portTf1.setEditable(false);
+            numPlayerCb.setDisable(true);
+            portTf1.setDisable(true);
 
             stopBtn.setOnAction(e1 -> {
                 statusLb1.setText("Server stopped");
                 backBtn1.setDisable(false);
                 startBtn.setDisable(false);
                 stopBtn.setDisable(true);
+                numPlayerCb.setDisable(false);
+                portTf1.setDisable(false);
             });
         });
 
         backBtn1.setOnAction(e -> {
-            ipTf1.clear();
+            numPlayerCb.valueProperty().set(null);
             portTf1.clear();
             statusLb1.setText("");
             primaryStage.setScene(menuScene);
@@ -129,14 +131,13 @@ public class Main extends Application {
         playGrid.setVgap(10);
         playGrid.setPadding(new Insets(10,10,10,10));
 
-        Label ipLb2 = new Label("IP Address: ");
-        Label portLb2 = new Label("Port: ");
+        Label ipLb = new Label("IP Address: ");
+        Label portLb = new Label("Port: ");
         Label statusLb2 = new Label();
 
-        TextField ipTf2 = new TextField();
-        ipTf2.setPromptText("IP Address");
-        TextField portTf2 = new TextField();
-        portTf2.setPromptText("Numbers only");
+        TextField ipTf = new TextField();
+        TextField portTf = new TextField();
+        portTf.setPromptText("Numbers only");
 
         Button backBtn2 = new Button("Back");
         backBtn2.setPrefWidth(50);
@@ -154,10 +155,10 @@ public class Main extends Application {
         innerGrid2.setAlignment(Pos.TOP_CENTER);
         innerGrid2.setHgap(10);
         innerGrid2.setVgap(10);
-        innerGrid2.add(ipLb2,0,0);
-        innerGrid2.add(ipTf2,1,0);
-        innerGrid2.add(portLb2,0,1);
-        innerGrid2.add(portTf2, 1, 1);
+        innerGrid2.add(ipLb,0,0);
+        innerGrid2.add(ipTf,1,0);
+        innerGrid2.add(portLb,0,1);
+        innerGrid2.add(portTf, 1, 1);
         innerGrid2.add(hBoxPlayBtn,0,2,2,1);
         innerGrid2.add(hBoxStatusLb2,0,3,2,1);
 
@@ -167,11 +168,15 @@ public class Main extends Application {
         playScene = new Scene(playGrid, menuWindowWidth, menuWindowHeight);
 
         backBtn2.setOnAction(e -> {
-            ipTf2.clear();
-            portTf2.clear();
+            ipTf.clear();
+            portTf.clear();
             statusLb2.setText("");
             primaryStage.setScene(menuScene);
         });
+
+
+        // Game scene
+
 
 
         primaryStage.setTitle("Hangman");
