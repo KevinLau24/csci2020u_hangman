@@ -9,10 +9,11 @@ This program is a server/client based game of hangman. Each player will take tur
 
 ## How to run
 In order to successfully run the program, here is a step-by-step process:
-1. Set-up Java and JavaFX: [instruction](https://openjfx.io/openjfx-docs/)
-2. Install IntelliJ IDEA IDE: [download](https://www.jetbrains.com/idea/download/) (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ)
-3. Clone [this](https://github.com/KevinLau24/csci2020u_hangman) repository into your local machine: [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
-4. 
+1. Install Java, requires Java JDK version 8 or higher, [instruction](https://www.oracle.com/java/technologies/javase-downloads.html)
+2. Install Gradle, recommend v6.8.3, [instruction](https://gradle.org/install/)
+3. Install IntelliJ IDEA IDE: [download](https://www.jetbrains.com/idea/download/) (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ)
+4. Clone [this](https://github.com/KevinLau24/csci2020u_hangman) repository into your local machine: [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
+5. 
 
 ## Other resources
 
