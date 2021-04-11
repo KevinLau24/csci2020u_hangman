@@ -1,4 +1,4 @@
-# csci2020u_hangman
+# CSCI 2020U - HANGMAN
 
 ## Identification
 
