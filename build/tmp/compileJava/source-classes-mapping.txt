@@ -1,10 +1,10 @@
-org/hangman/Server.java
- hangman.Server
 org/hangman/Client.java
  hangman.Client
-org/hangman/ClientThread.java
- hangman.ClientThread
 org/hangman/Game.java
  org.hangman.Game
 org/hangman/Main.java
  org.hangman.Main
+org/hangman/ClientThread.java
+ hangman.ClientThread
+org/hangman/Server.java
+ hangman.Server
