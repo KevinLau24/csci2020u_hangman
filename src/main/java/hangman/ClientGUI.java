@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -79,6 +81,47 @@ public class ClientGUI extends Application {
 
         Button playBtn = new Button("Play");
         playBtn.setPrefWidth(100);
+        playBtn.setOnAction(e -> {
+            // Game scene
+            Label wordLbl = new Label("word");
+            TextField guessTf = new TextField();
+            TextArea usedLettersTa = new TextArea();
+            Button guessBtn = new Button("Guess");
+            guessBtn.prefWidth(100);
+            Canvas hangmanCanvas = new Canvas(200,200);
+            GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
+            HBox hangmanHBox = new HBox(hangmanCanvas, usedLettersTa);
+            HBox guessesHBox = new HBox(guessTf, guessBtn);
+            HBox wordHBox = new HBox(wordLbl);
+
+            usedLettersTa.setEditable(false);
+            usedLettersTa.setText("Letters Guessed:");
+            usedLettersTa.setPrefWidth(175);
+
+            hangmanHBox.setAlignment(Pos.CENTER);
+            hangmanHBox.setSpacing(10);
+            guessesHBox.setAlignment(Pos.CENTER);
+            guessesHBox.setSpacing(10);
+            wordHBox.setAlignment(Pos.CENTER);
+            wordHBox.setSpacing(10);
+
+            // Hangman Stand
+            gc.setFill(Color.BLACK);
+            gc.strokeLine(0,200,100,200);
+            gc.strokeLine(50,0,50,200);
+            gc.strokeLine(50,0,150,0);
+            gc.strokeLine(150,0,150,20);
+
+            GridPane gameGrid = new GridPane();
+            gameGrid.setAlignment(Pos.CENTER);
+            gameGrid.setVgap(10);
+            gameGrid.add(wordHBox,0,0);
+            gameGrid.add(hangmanHBox, 0, 1);
+            gameGrid.add(guessesHBox,0,3);
+
+            gameScene = new Scene(gameGrid, W_WIDTH, W_HEIGHT);
+            primaryStage.setScene(gameScene);
+        });
         Button exitBtn = new Button("Exit");
         exitBtn.setPrefWidth(100);
         exitBtn.setOnAction(e -> {
@@ -102,11 +145,6 @@ public class ClientGUI extends Application {
         menuGrid.add(menuBtnVBox,0,1);
 
         menuScene = new Scene(menuGrid, W_WIDTH, W_HEIGHT);
-
-
-        // Game scene
-
-
 
         primaryStage.setTitle("Hangman");
         primaryStage.getIcons().add(logo);
