@@ -4,7 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.7'
 }
 
-group 'org.hangman'
+group 'hangman'
 
 repositories {
     mavenCentral()
@@ -25,4 +25,10 @@ javafx {
     version = '15.0.1'
 }
 
-mainClassName = 'org.hangman.Main'
+mainClassName = 'hangman.ClientGUI'
+
+task start(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'hangman.Server'
+    standardInput = System.in
+}

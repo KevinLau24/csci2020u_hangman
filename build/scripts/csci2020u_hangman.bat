@@ -67,11 +67,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\csci2020u_hangman.jar;%APP_HOME%\lib\javafx-controls-15.0.1-win.jar;%APP_HOME%\lib\javafx-graphics-15.0.1-win.jar;%APP_HOME%\lib\javafx-graphics-15.0.1.jar;%APP_HOME%\lib\javafx-base-15.0.1-win.jar;%APP_HOME%\lib\javafx-base-15.0.1.jar
+set CLASSPATH=%APP_HOME%\lib\csci2020u_hangman.jar;%APP_HOME%\lib\random-word-generator-1.1.0.jar;%APP_HOME%\lib\javafx-controls-15.0.1-win.jar;%APP_HOME%\lib\javafx-graphics-15.0.1-win.jar;%APP_HOME%\lib\javafx-graphics-15.0.1.jar;%APP_HOME%\lib\javafx-base-15.0.1-win.jar;%APP_HOME%\lib\javafx-base-15.0.1.jar;%APP_HOME%\lib\async-http-client-2.2.0.jar;%APP_HOME%\lib\jackson-databind-2.4.6.jar;%APP_HOME%\lib\async-http-client-netty-utils-2.2.0.jar;%APP_HOME%\lib\netty-handler-proxy-4.1.20.Final.jar;%APP_HOME%\lib\netty-codec-http-4.1.20.Final.jar;%APP_HOME%\lib\netty-reactive-streams-2.0.0.jar;%APP_HOME%\lib\netty-handler-4.1.20.Final.jar;%APP_HOME%\lib\netty-codec-socks-4.1.20.Final.jar;%APP_HOME%\lib\netty-transport-native-epoll-4.1.20.Final-linux-x86_64.jar;%APP_HOME%\lib\netty-resolver-dns-4.1.20.Final.jar;%APP_HOME%\lib\reactive-streams-1.0.2.jar;%APP_HOME%\lib\slf4j-api-1.7.25.jar;%APP_HOME%\lib\jackson-annotations-2.4.0.jar;%APP_HOME%\lib\jackson-core-2.4.6.jar;%APP_HOME%\lib\netty-codec-dns-4.1.20.Final.jar;%APP_HOME%\lib\netty-codec-4.1.20.Final.jar;%APP_HOME%\lib\netty-transport-native-unix-common-4.1.20.Final.jar;%APP_HOME%\lib\netty-transport-4.1.20.Final.jar;%APP_HOME%\lib\netty-buffer-4.1.20.Final.jar;%APP_HOME%\lib\netty-resolver-4.1.20.Final.jar;%APP_HOME%\lib\netty-common-4.1.20.Final.jar
 
 
 @rem Execute csci2020u_hangman
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSCI2020U_HANGMAN_OPTS%  -classpath "%CLASSPATH%" org.hangman.Main %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSCI2020U_HANGMAN_OPTS%  -classpath "%CLASSPATH%" hangman.Client %*
 
 :end
 @rem End local scope for the variables with windows NT shell
