@@ -1,4 +1,5 @@
 *.class
 *.bin
+*.lock
 out/
 .vscode/
