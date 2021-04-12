@@ -85,9 +85,19 @@ public class ClientGUI extends Application {
             // Game scene
             Label wordLbl = new Label("word");
             TextField guessTf = new TextField();
+
+            String guessLetter = guessTf.getText();
+
             TextArea usedLettersTa = new TextArea();
             Button guessBtn = new Button("Guess");
             guessBtn.prefWidth(100);
+
+            guessBtn.setOnAction(event -> {
+
+                System.out.println(guessLetter);
+
+            });
+
             Canvas hangmanCanvas = new Canvas(200,200);
             GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
             HBox hangmanHBox = new HBox(hangmanCanvas, usedLettersTa);
