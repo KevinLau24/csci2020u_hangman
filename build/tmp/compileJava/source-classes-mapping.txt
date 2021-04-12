@@ -1,8 +1,8 @@
 hangman/Server.java
  hangman.Server
-hangman/Client.java
- hangman.Client
-hangman/Game.java
- hangman.Game
 hangman/ClientThread.java
  hangman.ClientThread
+hangman/Game.java
+ hangman.Game
+hangman/ClientGUI.java
+ hangman.ClientGUI
