@@ -13,7 +13,13 @@ In order to successfully run the program, here is a step-by-step process:
 2. Install Gradle, recommend v6.8.3, [instruction](https://gradle.org/install/)
 3. Install IntelliJ IDEA IDE: [download](https://www.jetbrains.com/idea/download/) (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ)
 4. Clone [this](https://github.com/KevinLau24/csci2020u_hangman) repository into your local machine: [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
-5. 
+5. Once you have JavaFX and IntelliJ setup and working (Ensure correct libaries and VM are implemented), you want to run Server.java first to start the host server
+6. After Server.java is running, run ClientGUI.java next.
+7. Once ClientGUI is running, enter the Server's IP address, Server's Port, and click on the "Connect" button to establish a client connection.
+8. You are now given two options: "Play" and "Exit". Click on "Exit" to exit the program and click on "Play" to play hangman.
+9. Once you click "Play", you are directed to a screen where you can start to guess letters. 
+10. You have a maximum of 6 guess, and each time you guess a wrong letter, a body part of the human will appear on the hangman stand. 
+11. The objective of the game is to guess the word before you guessed 6 wrong letters. Once you have figure out the word, enter the word and you win!
 
 ## Other resources
 
