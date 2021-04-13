@@ -1,5 +1,7 @@
 package hangman;
 
+import javafx.scene.paint.Color;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -92,6 +94,7 @@ public class ClientThread extends Thread {
                     return;
                 }
                 numGuesses++;
+
                 if (numGuesses >= MAX_GUESSES) {
                     dataOutputStream.writeUTF("OUT OF GUESSES");
                     return;

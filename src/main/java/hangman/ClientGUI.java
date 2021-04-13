@@ -147,6 +147,15 @@ public class ClientGUI extends Application {
             gc.strokeLine(50,0,150,0);
             gc.strokeLine(150,0,150,20);
 
+            // Drawing human test
+            gc.setFill(Color.BLACK);
+            gc.strokeOval(135,20,30,30); //head
+            gc.strokeLine(150,50,150,120); //body
+            gc.strokeLine(150,80,100,30); // left arm
+            gc.strokeLine(150,80,200,30); // right arm
+            gc.strokeLine(150,120,100,175); //left leg
+            gc.strokeLine(150,120,200,175); //right leg
+
             GridPane gameGrid = new GridPane();
             gameGrid.setAlignment(Pos.CENTER);
             gameGrid.setVgap(10);
@@ -158,7 +167,12 @@ public class ClientGUI extends Application {
 
             guessBtn.setOnAction(e -> {
                 String message = client.sendGuess(guessTf.getText());
+                usedLettersTa.appendText(guessTf.getText() + '\n');
+
+
                 guessTf.clear();
+
+
                 if (message.equalsIgnoreCase("CONGRATULATION") | message.equalsIgnoreCase("OUT OF GUESSES")) {
                     System.out.println(message);
                     client.closeClient();
