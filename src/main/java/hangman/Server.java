@@ -14,12 +14,12 @@ public class Server {
     protected ClientThread thread = null;
     protected ArrayList<ClientThread> threads = null;
     protected int numClient = 0;
-    protected int numGuesses = 0;
-    protected String targetWord = "";
-    protected String currentWord = "";
-    protected ArrayList<String> guessedChar = null;
+    public static int numGuesses = 0;
+    public static String targetWord = "chicken";
+    public static String currentWord = "_______";
+    public static ArrayList<String> guessedChar = null;
 
-    protected int MAX_CLIENTS = 1;
+    public static int MAX_CLIENTS = 2;
     protected int MAX_GUESSES = 6;
     public static int SERVER_PORT = 6868;
     public static String SERVER_ADDRESS = null;
@@ -28,7 +28,7 @@ public class Server {
         try {
             threads = new ArrayList<>();
             guessedChar = new ArrayList<>();
-            generateWord();
+            //generateWord();
             InetAddress localhost = InetAddress.getLocalHost();
             SERVER_ADDRESS = localhost.getHostAddress();
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -38,7 +38,7 @@ public class Server {
             System.out.println("Server address: " + SERVER_ADDRESS);
             System.out.println("Listening to port: " + SERVER_PORT);
             System.out.println("---------------------------------------------");
-            while (!targetWord.equalsIgnoreCase(currentWord) | numGuesses < MAX_GUESSES) {
+            while (true) {
                 if (numClient < MAX_CLIENTS) {
                     clientSocket = serverSocket.accept();
                     thread = new ClientThread(clientSocket, targetWord, currentWord, numGuesses, guessedChar);
@@ -52,7 +52,6 @@ public class Server {
                     }
                 }
             }
-            serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

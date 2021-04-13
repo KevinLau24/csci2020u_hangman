@@ -11,10 +11,10 @@ public class ClientThread extends Thread {
     protected Socket socket = null;
     private DataOutputStream dataOutputStream = null;
     private DataInputStream dataInputStream = null;
-    protected int numGuesses = 0;
-    protected String targetWord = "";
-    protected String currentWord = "";
-    protected ArrayList<String> guessedChar = null;
+    public static int numGuesses = 0;
+    public static String targetWord = "";
+    public static String currentWord = "";
+    public static ArrayList<String> guessedChar = null;
 
     protected int MAX_GUESSES = 6;
 
@@ -92,7 +92,7 @@ public class ClientThread extends Thread {
                     return;
                 }
                 numGuesses++;
-                if (numGuesses == MAX_GUESSES) {
+                if (numGuesses >= MAX_GUESSES) {
                     dataOutputStream.writeUTF("OUT OF GUESSES");
                     return;
                 }
