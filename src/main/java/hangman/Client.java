@@ -94,6 +94,18 @@ public class Client {
         }
     }
 
+    public String getTargetWord() {
+        String targetWord = "";
+        try {
+            dataOutputStream.writeUTF("GET TARGET-WORD");
+            targetWord = dataInputStream.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            return targetWord;
+        }
+    }
+
     public void closeClient() {
         try {
             socket.close();

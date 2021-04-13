@@ -71,7 +71,7 @@ set CLASSPATH=%APP_HOME%\lib\csci2020u_hangman.jar;%APP_HOME%\lib\random-word-ge
 
 
 @rem Execute csci2020u_hangman
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSCI2020U_HANGMAN_OPTS%  -classpath "%CLASSPATH%" hangman.Client %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSCI2020U_HANGMAN_OPTS%  -classpath "%CLASSPATH%" org.hangman.ClientGUI %*
 
 :end
 @rem End local scope for the variables with windows NT shell

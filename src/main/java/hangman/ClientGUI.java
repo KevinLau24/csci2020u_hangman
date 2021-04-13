@@ -105,13 +105,14 @@ public class ClientGUI extends Application {
 
             // Game scene
             String currentWord = client.getWord();
-            ArrayList<String> guessedChar = new ArrayList<>(client.getGuessedChar());
+            final ArrayList<String>[] guessedChar = new ArrayList[]{new ArrayList<>(client.getGuessedChar())};
             int numGuesses = client.getNumGuesses();
             int MAX_GUESSES = 6;
 
             Label wordLbl = new Label(currentWord);
             wordLbl.setFont(Font.font("Arial", FontWeight.BOLD,15));
             Label usedLettersLb = new Label("Guessed Letters:");
+            Label statusLb = new Label();
 
             TextField guessTf = new TextField();
 
@@ -128,9 +129,15 @@ public class ClientGUI extends Application {
             HBox hangmanHBox = new HBox(hangmanCanvas, usedLettersVBox);
             HBox guessesHBox = new HBox(guessTf, guessBtn);
             HBox wordHBox = new HBox(wordLbl);
+            HBox statusHBox = new HBox(statusLb);
 
             usedLettersTa.setEditable(false);
             usedLettersTa.setPrefWidth(175);
+            String usedLetters = "";
+            for (String s : guessedChar[0]) {
+                usedLetters += s + "\n";
+            }
+            usedLettersTa.setText(usedLetters);
 
             usedLettersHBox.setAlignment(Pos.CENTER);
             usedLettersVBox.setSpacing(10);
@@ -139,6 +146,7 @@ public class ClientGUI extends Application {
             guessesHBox.setAlignment(Pos.CENTER);
             guessesHBox.setSpacing(10);
             wordHBox.setAlignment(Pos.CENTER);
+            statusHBox.setAlignment(Pos.CENTER);
 
             // Hangman Stand
             gc.setFill(Color.BLACK);
@@ -162,26 +170,47 @@ public class ClientGUI extends Application {
             gameGrid.add(wordHBox,0,0);
             gameGrid.add(hangmanHBox, 0, 2);
             gameGrid.add(guessesHBox,0,4);
+            gameGrid.add(statusHBox,0,5);
 
             gameScene = new Scene(gameGrid, W_WIDTH, W_HEIGHT);
 
             guessBtn.setOnAction(e -> {
-                String message = client.sendGuess(guessTf.getText());
-                usedLettersTa.appendText(guessTf.getText() + '\n');
-
-
+                String message = "";
+                String guessWord = guessTf.getText();
+                wordLbl.setText(client.getWord());
+                guessedChar[0] = new ArrayList<>(client.getGuessedChar());
+                if (guessedChar[0].contains(guessWord)) {
+                    statusLb.setText("Letter is already guessed!");
+                    statusLb.setTextFill(Color.RED);
+                } else {
+                    message = client.sendGuess(guessWord);
+                }
                 guessTf.clear();
-
-
-                if (message.equalsIgnoreCase("CONGRATULATION") | message.equalsIgnoreCase("OUT OF GUESSES")) {
-                    System.out.println(message);
+                if (message.equalsIgnoreCase("CONGRATULATION!") | message.equalsIgnoreCase("OUT OF GUESSES!")) {
+                    String targetWord = client.getTargetWord();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Result");
+                    alert.setHeaderText(null);
+                    alert.setContentText(message + "\n" + "The word is " + targetWord);
+                    alert.showAndWait();
                     client.closeClient();
                     primaryStage.setScene(menuScene);
                 }
-                if (message.equalsIgnoreCase("CONTINUE")) {
+                if (message.equalsIgnoreCase("CORRECT!") | message.equalsIgnoreCase("WRONG! Try again")) {
                     wordLbl.setText(client.getWord());
-                    System.out.println(client.getGuessedChar());
+                    guessedChar[0] = new ArrayList<>(client.getGuessedChar());
                     System.out.println(client.getNumGuesses());
+                    String usedLettersNew = "";
+                    for (String s : guessedChar[0]) {
+                        usedLettersNew += s + "\n";
+                    }
+                    usedLettersTa.setText(usedLettersNew);
+                    statusLb.setText(message);
+                    if (message.equalsIgnoreCase("CORRECT!")) {
+                        statusLb.setTextFill(Color.GREEN);
+                    } else {
+                        statusLb.setTextFill(Color.RED);
+                    }
                 }
             });
 

@@ -9,12 +9,12 @@ This program is a server/client based game of hangman. Each player will take tur
 
 ## How to run
 In order to successfully run the program, here is a step-by-step process:
-1. Install Java, requires Java JDK version 8 or higher, [instruction](https://www.oracle.com/java/technologies/javase-downloads.html)
+1. Install Java, requires Java JDK version 8 or higher, [instruction](https://www.oracle.com/java/technologies/javase-downloads.html).
 2. Install Gradle, recommend v6.8.3, [instruction](https://gradle.org/install/)
-3. Install IntelliJ IDEA IDE: [download](https://www.jetbrains.com/idea/download/) (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ)
-4. Clone [this](https://github.com/KevinLau24/csci2020u_hangman) repository into your local machine: [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
-5. Once you have JavaFX and IntelliJ setup and working (Ensure correct libaries and VM are implemented), you want to run Server.java first to start the host server
-6. After Server.java is running, run ClientGUI.java next.
+3. Install IntelliJ IDEA IDE: [download](https://www.jetbrains.com/idea/download/) (You are welcome to use other IDEs, but this step-by-step process will be covered using IntelliJ).
+4. Clone [this](https://github.com/KevinLau24/csci2020u_hangman) repository into your local machine: [instruction](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository).
+5. Once you have done the previous steps, you want to run Server.java first to start the host server, by using IntelliJ toolbar for Gradle on the right side and choose task **start**, or by typing this command into the console: **gradle start**
+6. After Server.java is running, run ClientGUI.java next, by using IntelliJ toolbar for Gradle on the right side and choose task **run**, or by typing this command into the console: **gradle run**
 7. Once ClientGUI is running, enter the Server's IP address, Server's Port, and click on the "Connect" button to establish a client connection.
 8. You are now given two options: "Play" and "Exit". Click on "Exit" to exit the program and click on "Play" to play hangman.
 9. Once you click "Play", you are directed to a screen where you can start to guess letters. 

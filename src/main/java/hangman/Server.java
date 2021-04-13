@@ -1,12 +1,13 @@
 package hangman;
 
-import com.github.dhiraj072.randomwordgenerator.RandomWordGenerator;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Server {
     protected Socket clientSocket = null;
@@ -15,8 +16,8 @@ public class Server {
     protected ArrayList<ClientThread> threads = null;
     protected int numClient = 0;
     public static int numGuesses = 0;
-    public static String targetWord = "chicken";
-    public static String currentWord = "_______";
+    public String targetWord;
+    public String currentWord;
     public static ArrayList<String> guessedChar = null;
 
     public static int MAX_CLIENTS = 2;
@@ -28,7 +29,7 @@ public class Server {
         try {
             threads = new ArrayList<>();
             guessedChar = new ArrayList<>();
-            //generateWord();
+            generateWord();
             InetAddress localhost = InetAddress.getLocalHost();
             SERVER_ADDRESS = localhost.getHostAddress();
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -58,9 +59,28 @@ public class Server {
     }
 
     public void generateWord() {
-        //targetWord = RandomWordGenerator.getRandomWord();
-        targetWord = "chicken";
-        currentWord = targetWord.replaceAll(".", "_");
+        try {
+            URL netURL = new URL("https://random-word-api.herokuapp.com//word?number=1");
+            URLConnection conn = netURL.openConnection();
+            conn.setDoOutput(false);
+            conn.setDoInput(true);
+            InputStream inStream = conn.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
+            StringBuffer buffer = new StringBuffer();
+            String line;
+            while ((line = in.readLine()) != null) {
+                buffer.append(line);
+            }
+            String jsonData = buffer.toString();
+            Pattern p = Pattern.compile("\"([^\"]*)\"");
+            Matcher m = p.matcher(jsonData);
+            while (m.find()) {
+                targetWord = m.group(1);
+            }
+            currentWord = targetWord.replaceAll(".", "_");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

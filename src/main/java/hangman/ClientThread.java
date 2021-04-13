@@ -36,9 +36,10 @@ public class ClientThread extends Thread {
     }
 
     public void run() {
+        boolean endOfSession = false;
         try {
-            while (!targetWord.equalsIgnoreCase(currentWord) | numGuesses < MAX_GUESSES) {
-                processCommand();
+            while (!endOfSession) {
+                 endOfSession = processCommand();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,13 +51,14 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void processCommand() throws IOException {
+    public boolean processCommand() throws IOException {
         synchronized (this) {
             String command = null;
             try {
                 command = dataInputStream.readUTF();
             } catch (IOException e) {
                 System.err.println("Error reading command from socket");
+                return true;
             }
 
             if (command.equalsIgnoreCase("GET GUESSED-CHAR")) {
@@ -64,22 +66,29 @@ public class ClientThread extends Thread {
                     dataOutputStream.writeUTF(s);
                 }
                 dataOutputStream.writeUTF("end()");
+                return false;
             }
 
             if (command.equalsIgnoreCase("GET GUESSED-NUM")) {
                 dataOutputStream.writeUTF(String.valueOf(numGuesses));
+                return false;
             }
 
             if (command.equalsIgnoreCase("GET WORD")) {
                 dataOutputStream.writeUTF(currentWord);
+                return false;
             }
 
             if (command.equalsIgnoreCase("SEND GUESS")) {
                 String guessedChar = dataInputStream.readUTF();
+                if (targetWord.equalsIgnoreCase(currentWord)) {
+                    dataOutputStream.writeUTF("CONGRATULATION!");
+                    return false;
+                }
                 if (targetWord.equalsIgnoreCase(guessedChar)) {
                     currentWord = targetWord;
-                    dataOutputStream.writeUTF("CONGRATULATION");
-                    return;
+                    dataOutputStream.writeUTF("CONGRATULATION!");
+                    return false;
                 }
                 this.guessedChar.add(guessedChar);
                 if (targetWord.toLowerCase().contains(guessedChar)) {
@@ -90,17 +99,23 @@ public class ClientThread extends Thread {
                             currentWord = currentWord.substring(0, i) + guessedChar + currentWord.substring(i+1);
                         }
                     }
-                    dataOutputStream.writeUTF("CONTINUE");
-                    return;
+                    dataOutputStream.writeUTF("CORRECT!");
+                    return false;
                 }
                 numGuesses++;
-
                 if (numGuesses >= MAX_GUESSES) {
-                    dataOutputStream.writeUTF("OUT OF GUESSES");
-                    return;
+                    dataOutputStream.writeUTF("OUT OF GUESSES!");
+                    return false;
                 }
-                dataOutputStream.writeUTF("CONTINUE");
+                dataOutputStream.writeUTF("WRONG! Try again");
+                return false;
+            }
+
+            if (command.equalsIgnoreCase("GET TARGET-WORD")) {
+                dataOutputStream.writeUTF(targetWord);
+                return true;
             }
         }
+        return true;
     }
 }
