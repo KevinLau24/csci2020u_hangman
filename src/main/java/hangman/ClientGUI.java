@@ -28,6 +28,10 @@ public class ClientGUI extends Application {
     private double W_HEIGHT = 375, W_WIDTH = 400;
     private Scene introScene, menuScene, gameScene;
     private Image logo = new Image("/images/logo.png");
+    //made hangmanCanvas private so drawHangman can access it
+    private Canvas hangmanCanvas;
+    //counter to keep track of which hangman part to draw
+    private int hangmanCount = 0;
 
     private static String SERVER_ADDRESS = null;
     private static int SERVER_PORT;
@@ -121,7 +125,7 @@ public class ClientGUI extends Application {
             Button guessBtn = new Button("Guess");
             guessBtn.prefWidth(100);
 
-            Canvas hangmanCanvas = new Canvas(200,200);
+            hangmanCanvas = new Canvas(200,200);
             GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
 
             HBox usedLettersHBox = new HBox(usedLettersLb);
@@ -155,14 +159,7 @@ public class ClientGUI extends Application {
             gc.strokeLine(50,0,150,0);
             gc.strokeLine(150,0,150,20);
 
-            // Drawing human test
-            gc.setFill(Color.BLACK);
-            gc.strokeOval(135,20,30,30); //head
-            gc.strokeLine(150,50,150,120); //body
-            gc.strokeLine(150,80,100,30); // left arm
-            gc.strokeLine(150,80,200,30); // right arm
-            gc.strokeLine(150,120,100,175); //left leg
-            gc.strokeLine(150,120,200,175); //right leg
+
 
             GridPane gameGrid = new GridPane();
             gameGrid.setAlignment(Pos.CENTER);
@@ -187,6 +184,9 @@ public class ClientGUI extends Application {
                 }
                 guessTf.clear();
                 if (message.equalsIgnoreCase("CONGRATULATION!") | message.equalsIgnoreCase("OUT OF GUESSES!")) {
+                    if(message.equalsIgnoreCase("OUT OF GUESSES!")){
+                        drawHangman();
+                    }
                     String targetWord = client.getTargetWord();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Result");
@@ -209,6 +209,7 @@ public class ClientGUI extends Application {
                     if (message.equalsIgnoreCase("CORRECT!")) {
                         statusLb.setTextFill(Color.GREEN);
                     } else {
+                        drawHangman();
                         statusLb.setTextFill(Color.RED);
                     }
                 }
@@ -223,6 +224,37 @@ public class ClientGUI extends Application {
         primaryStage.setTitle("Hangman");
         primaryStage.getIcons().add(logo);
         primaryStage.show();
+    }
+
+
+    //draws the hangman
+    private void drawHangman(){
+        GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+
+        if (hangmanCount == 0) {
+            gc.strokeOval(135,20,30,30); //head
+        }
+
+        else if (hangmanCount == 1) {
+            gc.strokeLine(150,50,150,120); //body
+        }
+
+        else if (hangmanCount == 2) {
+            gc.strokeLine(150,80,100,30); // left arm
+        }
+
+        else if (hangmanCount == 3) {
+            gc.strokeLine(150, 80, 200, 30); // right arm
+        }
+        else if (hangmanCount == 4) {
+            gc.strokeLine(150,120,100,175); //left leg
+        }
+        else{
+            gc.strokeLine(150,120,200,175); //right leg
+        }
+
+        hangmanCount++;
     }
 
 
