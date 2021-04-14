@@ -160,6 +160,7 @@ public class ClientGUI extends Application {
                     Runnable updater = new Runnable() {
                         @Override
                         public void run() {
+                            /*
                             wordLb.setText(client.getCurrentWord());
                             guessedChar = new ArrayList<>(client.getGuessedChar());
                             String usedLetters = "";
@@ -169,6 +170,13 @@ public class ClientGUI extends Application {
                             usedLettersTa.setText(usedLetters);
                             numGuesses = client.getNumGuesses();
                             drawHangman();
+                             */
+                            String message = client.isWin();
+                            if (message.equalsIgnoreCase("CONTINUE")) {
+                                update();
+                            } else {
+                                end(message);
+                            }
                         }
                     };
                     while (client.isWin().equalsIgnoreCase("CONTINUE")) {

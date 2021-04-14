@@ -1,16 +1,13 @@
 hangman/Client.java
  hangman.Client
-<<<<<<< HEAD
 hangman/Server.java
  hangman.Server
-=======
->>>>>>> c06770d33ae4f55fda5768ac3f268ade513a41e8
 hangman/ClientThread.java
  hangman.ClientThread
-hangman/ClientGUI.java
- hangman.ClientGUI
 <<<<<<< HEAD
  hangman.ClientGUI$1
  hangman.ClientGUI$1$1
-=======
->>>>>>> c06770d33ae4f55fda5768ac3f268ade513a41e8
+hangman/ClientGUI.java
+ hangman.ClientGUI
+ hangman.ClientGUI$1
+ hangman.ClientGUI$1$1
