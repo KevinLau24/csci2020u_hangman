@@ -234,27 +234,32 @@ public class ClientGUI extends Application {
 
         if (hangmanCount == 0) {
             gc.strokeOval(135,20,30,30); //head
+            hangmanCount++;
         }
 
         else if (hangmanCount == 1) {
             gc.strokeLine(150,50,150,120); //body
+            hangmanCount++;
         }
 
         else if (hangmanCount == 2) {
             gc.strokeLine(150,80,100,30); // left arm
+            hangmanCount++;
         }
 
         else if (hangmanCount == 3) {
             gc.strokeLine(150, 80, 200, 30); // right arm
+            hangmanCount++;
         }
         else if (hangmanCount == 4) {
             gc.strokeLine(150,120,100,175); //left leg
+            hangmanCount++;
         }
         else{
             gc.strokeLine(150,120,200,175); //right leg
+            hangmanCount = 0;
         }
 
-        hangmanCount++;
     }
 
 
