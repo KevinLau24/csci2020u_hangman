@@ -29,4 +29,4 @@ In order to successfully run the program, here is a step-by-step process:
 [Random English Word Generator API](https://random-word-api.herokuapp.com/home) \
 [JavaFX Application Icon](https://stackoverflow.com/questions/10121991/javafx-application-icon) \
 [JavaFX TextArea](http://tutorials.jenkov.com/javafx/textarea.html#:~:text=A%20JavaFX%20TextArea%20control%20enables,scene) \
-[Auto Updating JavaFX UI](https://riptutorial.com/javafx/example/7291/updating-the-ui-using-platform-runlater) \
+[Auto Updating JavaFX UI](https://riptutorial.com/javafx/example/7291/updating-the-ui-using-platform-runlater)

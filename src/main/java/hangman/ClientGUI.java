@@ -16,11 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ClientGUI extends Application {
+    // Initialize variables here so it can use in other thread and helper methods
     private double W_HEIGHT = 375, W_WIDTH = 400;
     private Scene introScene, menuScene, gameScene;
     private Image logo = new Image("/images/logo.png");
@@ -32,13 +31,14 @@ public class ClientGUI extends Application {
     private Client client;
     private int numGuesses = 0;
     private ArrayList<String> guessedChar;
+    private Alert alert;
 
     private static String SERVER_ADDRESS = null;
     private static int SERVER_PORT;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Intro scene
+        // Intro scene - Take Server's IP Address and Server's Port
         Label ipAddressLb = new Label("Server's IP Address:");
         Label portLb = new Label("Server's Port:");
         Label connectStatusLb = new Label();
@@ -48,6 +48,7 @@ public class ClientGUI extends Application {
 
         Button connectBtn = new Button("Connect");
 
+        // These HBoxes and VBoxes are for align the elements in GridPane
         HBox ipAddressHBox = new HBox(ipAddressLb);
         ipAddressHBox.setAlignment(Pos.CENTER);
         HBox portHBox = new HBox(portLb);
@@ -89,6 +90,7 @@ public class ClientGUI extends Application {
         exitBtn.setPrefWidth(100);
         exitBtn.setOnAction(e -> Platform.exit());
 
+        // These HBoxes and VBoxes are for align the elements in GridPane
         VBox menuBtnVBox = new VBox();
         menuBtnVBox.getChildren().addAll(playBtn, exitBtn);
         menuBtnVBox.setAlignment(Pos.CENTER);
@@ -125,6 +127,7 @@ public class ClientGUI extends Application {
 
             hangmanCanvas = new Canvas(200,200);
 
+            // These HBoxes and VBoxes are for align the elements in GridPane
             HBox usedLettersHBox = new HBox(usedLettersLb);
             VBox usedLettersVBox = new VBox(usedLettersHBox, usedLettersTa);
             HBox hangmanHBox = new HBox(hangmanCanvas, usedLettersVBox);
@@ -160,22 +163,17 @@ public class ClientGUI extends Application {
                     Runnable updater = new Runnable() {
                         @Override
                         public void run() {
-                            /*
-                            wordLb.setText(client.getCurrentWord());
-                            guessedChar = new ArrayList<>(client.getGuessedChar());
-                            String usedLetters = "";
-                            for (String s : guessedChar) {
-                                usedLetters += s + "\n";
-                            }
-                            usedLettersTa.setText(usedLetters);
-                            numGuesses = client.getNumGuesses();
-                            drawHangman();
-                             */
-                            String message = client.isWin();
-                            if (message.equalsIgnoreCase("CONTINUE")) {
+                            synchronized (this) {
                                 update();
-                            } else {
-                                end(message);
+                            }
+                        }
+                    };
+                    Runnable endGame = new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (this) {
+                                end(client.isWin());
+                                primaryStage.setScene(menuScene);
                             }
                         }
                     };
@@ -183,10 +181,9 @@ public class ClientGUI extends Application {
                         Platform.runLater(updater);
                         try {
                             Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                        }
+                        } catch (InterruptedException e) {}
                     }
-                    end(client.isWin());
+                    Platform.runLater(endGame);
                 }
             });
             update.start();
@@ -261,7 +258,7 @@ public class ClientGUI extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Result");
         alert.setHeaderText(null);
         alert.setContentText(message + "\n" + "The word is " + client.getTargetWord());
