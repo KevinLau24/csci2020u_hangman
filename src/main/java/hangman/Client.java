@@ -36,10 +36,10 @@ public class Client {
         }
     }
 
-    public String getWord() {
+    public String getCurrentWord() {
         String word = "";
         try {
-            dataOutputStream.writeUTF("GET WORD");
+            dataOutputStream.writeUTF("CURRENT-WORD");
             word = dataInputStream.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,10 +48,22 @@ public class Client {
         }
     }
 
+    public String getTargetWord() {
+        String targetWord = "";
+        try {
+            dataOutputStream.writeUTF("TARGET-WORD");
+            targetWord = dataInputStream.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            return targetWord;
+        }
+    }
+
     public int getNumGuesses() {
         int numGuesses = 0;
         try {
-            dataOutputStream.writeUTF("GET GUESSED-NUM");
+            dataOutputStream.writeUTF("GUESSED-NUM");
             numGuesses = Integer.parseInt(dataInputStream.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,9 +73,9 @@ public class Client {
     }
 
     public ArrayList<String> getGuessedChar() {
-        ArrayList<String> temp = new ArrayList<>();
+        ArrayList<String> guessedChar = new ArrayList<>();
         try {
-            dataOutputStream.writeUTF("GET GUESSED-CHAR");
+            dataOutputStream.writeUTF("GUESSED-CHAR");
             String message;
             while (true) {
                 if (dataInputStream.available() > 0) {
@@ -71,20 +83,20 @@ public class Client {
                     if (message.equalsIgnoreCase("end()")) {
                         break;
                     }
-                    temp.add(message);
+                    guessedChar.add(message);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            return temp;
+            return guessedChar;
         }
     }
 
     public String sendGuess(String guess) {
         String message = "";
         try {
-            dataOutputStream.writeUTF("SEND GUESS");
+            dataOutputStream.writeUTF("GUESS-WORD");
             dataOutputStream.writeUTF(guess);
             message = dataInputStream.readUTF();
         } catch (IOException e) {
@@ -94,20 +106,21 @@ public class Client {
         }
     }
 
-    public String getTargetWord() {
-        String targetWord = "";
+    public String isWin() {
+        String message = "";
         try {
-            dataOutputStream.writeUTF("GET TARGET-WORD");
-            targetWord = dataInputStream.readUTF();
+            dataOutputStream.writeUTF("IS-WIN");
+            message = dataInputStream.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            return targetWord;
+            return message;
         }
     }
 
     public void closeClient() {
         try {
+            dataOutputStream.writeUTF("CLOSE");
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

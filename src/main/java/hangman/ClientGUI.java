@@ -17,21 +17,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class ClientGUI extends Application {
     private double W_HEIGHT = 375, W_WIDTH = 400;
     private Scene introScene, menuScene, gameScene;
     private Image logo = new Image("/images/logo.png");
-    //made hangmanCanvas private so drawHangman can access it
+
+    private Label wordLb;
+    private TextArea usedLettersTa;
     private Canvas hangmanCanvas;
-    //counter to keep track of which hangman part to draw
-    private int hangmanCount = 0;
+
+    private Client client;
+    private int numGuesses = 0;
+    private ArrayList<String> guessedChar;
 
     private static String SERVER_ADDRESS = null;
     private static int SERVER_PORT;
@@ -105,43 +105,35 @@ public class ClientGUI extends Application {
         playBtn.setOnAction(event -> {
             // SERVER_ADDRESS = ipAddressTf.getText();
             // SERVER_PORT = Integer.parseInt(portTf.getText());
-            Client client = new Client("localhost", 6868);
+            client = new Client("localhost", 6868);
 
             // Game scene
-            String currentWord = client.getWord();
-            final ArrayList<String>[] guessedChar = new ArrayList[]{new ArrayList<>(client.getGuessedChar())};
-            int numGuesses = client.getNumGuesses();
-            int MAX_GUESSES = 6;
+            guessedChar = new ArrayList<>(client.getGuessedChar());
+            numGuesses = client.getNumGuesses();
 
-            Label wordLbl = new Label(currentWord);
-            wordLbl.setFont(Font.font("Arial", FontWeight.BOLD,15));
+            wordLb = new Label();
+            wordLb.setFont(Font.font("Arial", FontWeight.BOLD,15));
             Label usedLettersLb = new Label("Guessed Letters:");
             Label statusLb = new Label();
 
             TextField guessTf = new TextField();
 
-            TextArea usedLettersTa = new TextArea();
+            usedLettersTa = new TextArea();
 
             Button guessBtn = new Button("Guess");
             guessBtn.prefWidth(100);
 
             hangmanCanvas = new Canvas(200,200);
-            GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
 
             HBox usedLettersHBox = new HBox(usedLettersLb);
             VBox usedLettersVBox = new VBox(usedLettersHBox, usedLettersTa);
             HBox hangmanHBox = new HBox(hangmanCanvas, usedLettersVBox);
             HBox guessesHBox = new HBox(guessTf, guessBtn);
-            HBox wordHBox = new HBox(wordLbl);
+            HBox wordHBox = new HBox(wordLb);
             HBox statusHBox = new HBox(statusLb);
 
             usedLettersTa.setEditable(false);
             usedLettersTa.setPrefWidth(175);
-            String usedLetters = "";
-            for (String s : guessedChar[0]) {
-                usedLetters += s + "\n";
-            }
-            usedLettersTa.setText(usedLetters);
 
             usedLettersHBox.setAlignment(Pos.CENTER);
             usedLettersVBox.setSpacing(10);
@@ -151,15 +143,6 @@ public class ClientGUI extends Application {
             guessesHBox.setSpacing(10);
             wordHBox.setAlignment(Pos.CENTER);
             statusHBox.setAlignment(Pos.CENTER);
-
-            // Hangman Stand
-            gc.setFill(Color.BLACK);
-            gc.strokeLine(0,200,100,200);
-            gc.strokeLine(50,0,50,200);
-            gc.strokeLine(50,0,150,0);
-            gc.strokeLine(150,0,150,20);
-
-
 
             GridPane gameGrid = new GridPane();
             gameGrid.setAlignment(Pos.CENTER);
@@ -171,54 +154,72 @@ public class ClientGUI extends Application {
 
             gameScene = new Scene(gameGrid, W_WIDTH, W_HEIGHT);
 
+            Thread update = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Runnable updater = new Runnable() {
+                        @Override
+                        public void run() {
+                            wordLb.setText(client.getCurrentWord());
+                            guessedChar = new ArrayList<>(client.getGuessedChar());
+                            String usedLetters = "";
+                            for (String s : guessedChar) {
+                                usedLetters += s + "\n";
+                            }
+                            usedLettersTa.setText(usedLetters);
+                            numGuesses = client.getNumGuesses();
+                            drawHangman();
+                        }
+                    };
+                    while (client.isWin().equalsIgnoreCase("CONTINUE")) {
+                        Platform.runLater(updater);
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+                    end(client.isWin());
+                }
+            });
+            update.start();
+
             guessBtn.setOnAction(e -> {
+                try {
+                    update.sleep(500);
+                } catch (InterruptedException ex) {
+                }
                 String message = "";
                 String guessWord = guessTf.getText();
-                wordLbl.setText(client.getWord());
-                guessedChar[0] = new ArrayList<>(client.getGuessedChar());
-                if (guessedChar[0].contains(guessWord)) {
-                    statusLb.setText("Letter is already guessed!");
+                guessTf.clear();
+                if (!isStringOnlyAlphabet(guessWord)) {
+                    statusLb.setText("Invalid input! Try again");
+                    statusLb.setTextFill(Color.RED);
+                } else if (guessedChar.contains(guessWord)) {
+                    statusLb.setText("Letter is already guessed! Try again");
                     statusLb.setTextFill(Color.RED);
                 } else {
                     message = client.sendGuess(guessWord);
-                }
-                guessTf.clear();
-                if (message.equalsIgnoreCase("CONGRATULATION!") | message.equalsIgnoreCase("OUT OF GUESSES!")) {
-                    if(message.equalsIgnoreCase("OUT OF GUESSES!")){
-                        drawHangman();
-                    }
-                    String targetWord = client.getTargetWord();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Result");
-                    alert.setHeaderText(null);
-                    alert.setContentText(message + "\n" + "The word is " + targetWord);
-                    alert.showAndWait();
-                    client.closeClient();
-                    primaryStage.setScene(menuScene);
-                }
-                if (message.equalsIgnoreCase("CORRECT!") | message.equalsIgnoreCase("WRONG! Try again")) {
-                    wordLbl.setText(client.getWord());
-                    guessedChar[0] = new ArrayList<>(client.getGuessedChar());
-                    System.out.println(client.getNumGuesses());
-                    String usedLettersNew = "";
-                    for (String s : guessedChar[0]) {
-                        usedLettersNew += s + "\n";
-                    }
-                    usedLettersTa.setText(usedLettersNew);
-                    statusLb.setText(message);
-                    if (message.equalsIgnoreCase("CORRECT!")) {
-                        statusLb.setTextFill(Color.GREEN);
+                    if (message.equalsIgnoreCase("DONE")) {
+                        update.stop();
+                        message = client.isWin();
+                        end(message);
+                        primaryStage.setScene(menuScene);
                     } else {
-                        drawHangman();
-                        statusLb.setTextFill(Color.RED);
+                        update();
+                        if (message.equalsIgnoreCase("CORRECT!")) {
+                            statusLb.setTextFill(Color.GREEN);
+                        } else {
+                            statusLb.setTextFill(Color.RED);
+                        }
+                        statusLb.setText(message);
                     }
                 }
+                update.interrupt();
             });
+
 
             primaryStage.setScene(gameScene);
         });
-
-
 
 
         primaryStage.setTitle("Hangman");
@@ -226,35 +227,75 @@ public class ClientGUI extends Application {
         primaryStage.show();
     }
 
+    public static boolean isStringOnlyAlphabet(String str) {
+        return ((str != null)
+                && (!str.equals(""))
+                && (str.matches("^[a-zA-Z]*$")));
+    }
+
+    private void update() {
+        wordLb.setText(client.getCurrentWord());
+        guessedChar = new ArrayList<>(client.getGuessedChar());
+        String usedLetters = "";
+        for (String s : guessedChar) {
+            usedLetters += s + "\n";
+        }
+        usedLettersTa.setText(usedLetters);
+        numGuesses = client.getNumGuesses();
+        drawHangman();
+    }
+
+    private void end(String message) {
+        update();
+        wordLb.setText(client.getTargetWord());
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Result");
+        alert.setHeaderText(null);
+        alert.setContentText(message + "\n" + "The word is " + client.getTargetWord());
+        alert.showAndWait();
+        client.closeClient();
+    }
 
     //draws the hangman
-    private void drawHangman(){
+    private void drawHangman() {
         GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
+        gc.clearRect(0, 0, 200, 200);
 
-        if (hangmanCount == 0) {
-            gc.strokeOval(135,20,30,30); //head
-        }
+        // Hangman Stand
+        gc.setFill(Color.BLACK);
+        gc.strokeLine(0,200,100,200);
+        gc.strokeLine(50,0,50,200);
+        gc.strokeLine(50,0,150,0);
+        gc.strokeLine(150,0,150,20);
 
-        else if (hangmanCount == 1) {
-            gc.strokeLine(150,50,150,120); //body
+        int hangmanCount = 0;
+        while (hangmanCount < numGuesses) {
+            if (hangmanCount == 0) {
+                gc.strokeOval(135,20,30,30); //head
+            }
+            else if (hangmanCount == 1) {
+                gc.strokeLine(150,50,150,120); //body
+            }
+            else if (hangmanCount == 2) {
+                gc.strokeLine(150,80,100,30); // left arm
+            }
+            else if (hangmanCount == 3) {
+                gc.strokeLine(150, 80, 200, 30); // right arm
+            }
+            else if (hangmanCount == 4) {
+                gc.strokeLine(150,120,100,175); //left leg
+            }
+            else {
+                gc.strokeLine(150,120,200,175); //right leg
+            }
+            hangmanCount++;
         }
-
-        else if (hangmanCount == 2) {
-            gc.strokeLine(150,80,100,30); // left arm
-        }
-
-        else if (hangmanCount == 3) {
-            gc.strokeLine(150, 80, 200, 30); // right arm
-        }
-        else if (hangmanCount == 4) {
-            gc.strokeLine(150,120,100,175); //left leg
-        }
-        else{
-            gc.strokeLine(150,120,200,175); //right leg
-        }
-
-        hangmanCount++;
     }
 
 

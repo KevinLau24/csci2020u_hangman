@@ -27,9 +27,6 @@ public class Server {
 
     public Server() {
         try {
-            threads = new ArrayList<>();
-            guessedChar = new ArrayList<>();
-            generateWord();
             InetAddress localhost = InetAddress.getLocalHost();
             SERVER_ADDRESS = localhost.getHostAddress();
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -39,6 +36,9 @@ public class Server {
             System.out.println("Server address: " + SERVER_ADDRESS);
             System.out.println("Listening to port: " + SERVER_PORT);
             System.out.println("---------------------------------------------");
+            threads = new ArrayList<>();
+            guessedChar = new ArrayList<>();
+            generateWord();
             while (true) {
                 if (numClient < MAX_CLIENTS) {
                     clientSocket = serverSocket.accept();
@@ -78,6 +78,7 @@ public class Server {
                 targetWord = m.group(1);
             }
             currentWord = targetWord.replaceAll(".", "_");
+            System.out.println("Target word: " + targetWord);
         } catch (IOException e) {
             e.printStackTrace();
         }
