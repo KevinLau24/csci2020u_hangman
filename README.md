@@ -22,7 +22,7 @@ In order to successfully run the program, here is a step-by-step process:
 7. Once ClientGUI is running, enter the Server's IP address, Server's Port, and click on the "Connect" button to establish a client connection.
 8. You are now given two options: "Play" and "Exit". Click on "Exit" to exit the program and click on "Play" to play hangman.
 9. Once you click "Play", you are directed to a screen where you can start to guess letters. 
-10. You have a maximum of 6 guess, and each time you guess a wrong letter, a body part of the human will appear on the hangman stand. 
+10. You have a maximum of 6 wrong guesses, and each time you guess a wrong letter, a body part of the human will appear on the hangman stand. 
 11. The objective of the game is to guess the word before you guessed 6 wrong letters. Once you have figure out the word, enter the word and you win!
 
 ## Other resources
