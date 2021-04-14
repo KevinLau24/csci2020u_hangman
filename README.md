@@ -6,6 +6,9 @@ Group Members: Kevin Lau (100746819), Thinh Le (100741899), Kenneth Tse (1007467
 
 ## Project Information
 This program is a server/client based game of hangman. Each player will take turns to guess letters or the word. If the players do not guess the word before the hanging man is drawn then they lose. If they are able to guess the word before they are out of chances then they win.
+![Alt text](https://github.com/KevinLau24/csci2020u_hangman/blob/main/src/main/resources/images/clientConnect.PNG)
+![Alt text](https://github.com/KevinLau24/csci2020u_hangman/blob/main/src/main/resources/images/menu.PNG)
+![Alt text](https://github.com/KevinLau24/csci2020u_hangman/blob/main/src/main/resources/images/game.PNG)
 
 
 ## How to run
@@ -24,5 +27,5 @@ In order to successfully run the program, here is a step-by-step process:
 
 ## Other resources
 https://random-word-api.herokuapp.com/home
-https://stackoverflow.com/questions/10121991/javafx-application-icon
+https://stackoverflow.com/questions/10121991/javafx-application-icon \
 http://tutorials.jenkov.com/javafx/textarea.html#:~:text=A%20JavaFX%20TextArea%20control%20enables,scene
