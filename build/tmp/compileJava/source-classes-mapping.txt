@@ -4,10 +4,6 @@ hangman/Server.java
  hangman.Server
 hangman/ClientThread.java
  hangman.ClientThread
-<<<<<<< HEAD
- hangman.ClientGUI$1
- hangman.ClientGUI$1$1
+
 hangman/ClientGUI.java
  hangman.ClientGUI
- hangman.ClientGUI$1
- hangman.ClientGUI$1$1
