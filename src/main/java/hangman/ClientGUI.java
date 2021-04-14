@@ -73,9 +73,7 @@ public class ClientGUI extends Application {
         introScene = new Scene(introGrid, W_WIDTH, W_HEIGHT);
         primaryStage.setScene(introScene);
 
-        connectBtn.setOnAction(event -> {
-            primaryStage.setScene(menuScene);
-        });
+        connectBtn.setOnAction(event -> { primaryStage.setScene(menuScene); });
 
 
         // Menu scene
@@ -105,14 +103,13 @@ public class ClientGUI extends Application {
         menuScene = new Scene(menuGrid, W_WIDTH, W_HEIGHT);
 
         playBtn.setOnAction(event -> {
+            // Can change this to "localhost" for easy testing
             // SERVER_ADDRESS = ipAddressTf.getText();
             // SERVER_PORT = Integer.parseInt(portTf.getText());
             client = new Client("localhost", 6868);
 
-            // Game scene
-            guessedChar = new ArrayList<>(client.getGuessedChar());
-            numGuesses = client.getNumGuesses();
 
+            // Game scene
             wordLb = new Label();
             wordLb.setFont(Font.font("Arial", FontWeight.BOLD,15));
             Label usedLettersLb = new Label("Guessed Letters:");
@@ -157,9 +154,13 @@ public class ClientGUI extends Application {
 
             gameScene = new Scene(gameGrid, W_WIDTH, W_HEIGHT);
 
+            /* This thread runs in the background to auto-update game UI
+            So player don't need to do any action to update game UI
+            */
             Thread update = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    // Helper object to auto-update game UI inside Thread
                     Runnable updater = new Runnable() {
                         @Override
                         public void run() {
@@ -168,6 +169,7 @@ public class ClientGUI extends Application {
                             }
                         }
                     };
+                    // Helper object to auto-check winning condition of the game inside Thread
                     Runnable endGame = new Runnable() {
                         @Override
                         public void run() {
@@ -177,6 +179,7 @@ public class ClientGUI extends Application {
                             }
                         }
                     };
+                    // This while loop will keep the thread running until winning condition occur
                     while (client.isWin().equalsIgnoreCase("CONTINUE")) {
                         Platform.runLater(updater);
                         try {
@@ -189,13 +192,14 @@ public class ClientGUI extends Application {
             update.start();
 
             guessBtn.setOnAction(e -> {
+                // Pause the background thread to prevent JavaFX elements being changed simultaneously
                 try {
                     update.sleep(500);
-                } catch (InterruptedException ex) {
-                }
+                } catch (InterruptedException ex) {}
                 String message = "";
                 String guessWord = guessTf.getText();
                 guessTf.clear();
+                // Check if input is alphabetical letters, and whether if its been guessed before
                 if (!isStringOnlyAlphabet(guessWord)) {
                     statusLb.setText("Invalid input! Try again");
                     statusLb.setTextFill(Color.RED);
@@ -204,12 +208,14 @@ public class ClientGUI extends Application {
                     statusLb.setTextFill(Color.RED);
                 } else {
                     message = client.sendGuess(guessWord);
+                    // Winning condition occur, display result popup and back to menuScene
                     if (message.equalsIgnoreCase("DONE")) {
                         update.stop();
                         message = client.isWin();
                         end(message);
                         primaryStage.setScene(menuScene);
                     } else {
+                        // Continue the game
                         update();
                         if (message.equalsIgnoreCase("CORRECT!")) {
                             statusLb.setTextFill(Color.GREEN);
@@ -232,12 +238,14 @@ public class ClientGUI extends Application {
         primaryStage.show();
     }
 
+    // This method is for checking if the input is alphabetical
     public static boolean isStringOnlyAlphabet(String str) {
         return ((str != null)
                 && (!str.equals(""))
                 && (str.matches("^[a-zA-Z]*$")));
     }
 
+    // This method is for updating the game UI
     private void update() {
         wordLb.setText(client.getCurrentWord());
         guessedChar = new ArrayList<>(client.getGuessedChar());
@@ -250,23 +258,21 @@ public class ClientGUI extends Application {
         drawHangman();
     }
 
+    // This method is for display the result popup when the game ends
     private void end(String message) {
         update();
         wordLb.setText(client.getTargetWord());
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // 'alert' is a window popup
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Result");
         alert.setHeaderText(null);
         alert.setContentText(message + "\n" + "The word is " + client.getTargetWord());
         alert.showAndWait();
+        // Disconnect with the server
         client.closeClient();
     }
 
-    //draws the hangman
+    // This method is to draw the hangman
     private void drawHangman() {
         GraphicsContext gc = hangmanCanvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
@@ -279,6 +285,7 @@ public class ClientGUI extends Application {
         gc.strokeLine(50,0,150,0);
         gc.strokeLine(150,0,150,20);
 
+        // Hangman figure
         int hangmanCount = 0;
         while (hangmanCount < numGuesses) {
             if (hangmanCount == 0) {

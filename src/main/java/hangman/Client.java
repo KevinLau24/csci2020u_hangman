@@ -36,6 +36,7 @@ public class Client {
         }
     }
 
+    // Get the current state of the target word
     public String getCurrentWord() {
         String word = "";
         try {
@@ -48,6 +49,7 @@ public class Client {
         }
     }
 
+    // Get the target word
     public String getTargetWord() {
         String targetWord = "";
         try {
@@ -60,6 +62,7 @@ public class Client {
         }
     }
 
+    // Get the current number of guesses
     public int getNumGuesses() {
         int numGuesses = 0;
         try {
@@ -72,6 +75,7 @@ public class Client {
         }
     }
 
+    // Get the list of letters been guessed
     public ArrayList<String> getGuessedChar() {
         ArrayList<String> guessedChar = new ArrayList<>();
         try {
@@ -93,6 +97,7 @@ public class Client {
         }
     }
 
+    // Send the guess letter to the server
     public String sendGuess(String guess) {
         String message = "";
         try {
@@ -106,6 +111,7 @@ public class Client {
         }
     }
 
+    // Get winning condition of the game
     public String isWin() {
         String message = "";
         try {
@@ -118,6 +124,7 @@ public class Client {
         }
     }
 
+    // Disconnect from the server
     public void closeClient() {
         try {
             dataOutputStream.writeUTF("CLOSE");

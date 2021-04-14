@@ -27,6 +27,7 @@ public class Server {
 
     public Server() {
         try {
+            // Set up server and display info for players to connect
             InetAddress localhost = InetAddress.getLocalHost();
             SERVER_ADDRESS = localhost.getHostAddress();
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -40,6 +41,7 @@ public class Server {
             guessedChar = new ArrayList<>();
             generateWord();
             while (true) {
+                // This while loop will keep the server run until its been stop manually
                 if (numClient < MAX_CLIENTS) {
                     clientSocket = serverSocket.accept();
                     thread = new ClientThread(clientSocket, targetWord, currentWord, numGuesses, guessedChar);
@@ -47,6 +49,7 @@ public class Server {
                     thread.start();
                     numClient++;
                 }
+                // Update number of clients so players can disconnect and reconnect
                 for (ClientThread thread : threads) {
                     if (!thread.isAlive()) {
                         numClient--;
@@ -58,6 +61,7 @@ public class Server {
         }
     }
 
+    // This method is for download a random word from the random word generator API
     public void generateWord() {
         try {
             URL netURL = new URL("https://random-word-api.herokuapp.com//word?number=1");
