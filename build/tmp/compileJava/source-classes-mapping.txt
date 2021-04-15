@@ -1,11 +1,11 @@
-hangman/Client.java
- hangman.Client
 hangman/Server.java
  hangman.Server
-hangman/ClientThread.java
- hangman.ClientThread
+hangman/Client.java
+ hangman.Client
 hangman/ClientGUI.java
  hangman.ClientGUI
  hangman.ClientGUI$1
  hangman.ClientGUI$1$1
  hangman.ClientGUI$1$2
+hangman/ClientThread.java
+ hangman.ClientThread

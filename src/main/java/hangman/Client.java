@@ -7,6 +7,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+/**
+ * @author Thinh Le, Kenneth Tse, Kevin Lau, John Tovera
+ * <h1>Client</h1>
+ * <p>This class implements the client object handles the backend features
+ * to connect with the server</p>
+ */
+
 public class Client {
     private Socket socket = null;
     private DataOutputStream dataOutputStream = null;
@@ -15,8 +22,15 @@ public class Client {
     private static String SERVER_ADDRESS = null;
     private static int SERVER_PORT;
 
+    /**
+     * Create Client object with a socket connect to the server
+     * Create data IO streams for the socket to transfer and receive data from server
+     * @param serverAddress Server's IP address
+     * @param port Server's port
+     */
     public Client (String serverAddress, int port) {
         try {
+            // Create socket
             SERVER_ADDRESS = serverAddress;
             SERVER_PORT = port;
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
@@ -29,6 +43,7 @@ public class Client {
             System.err.println("Socket is null");
         }
         try {
+            // Create data IO streams
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -36,7 +51,10 @@ public class Client {
         }
     }
 
-    // Get the current state of the target word
+    /**
+     * Get the current state of the target word from the server
+     * @return String The current state of the target word
+     */
     public String getCurrentWord() {
         String word = "";
         try {
@@ -49,7 +67,10 @@ public class Client {
         }
     }
 
-    // Get the target word
+    /**
+     * Get the target word from the server
+     * @return String The target word
+     */
     public String getTargetWord() {
         String targetWord = "";
         try {
@@ -62,7 +83,10 @@ public class Client {
         }
     }
 
-    // Get the current number of guesses
+    /**
+     * Get the current number of guesses
+     * @return int The current number of guesses
+     */
     public int getNumGuesses() {
         int numGuesses = 0;
         try {
@@ -75,7 +99,10 @@ public class Client {
         }
     }
 
-    // Get the list of letters been guessed
+    /**
+     * Get the list of letters been guessed
+     * @return ArrayList The list of all guessed characters
+     */
     public ArrayList<String> getGuessedChar() {
         ArrayList<String> guessedChar = new ArrayList<>();
         try {
@@ -97,7 +124,11 @@ public class Client {
         }
     }
 
-    // Send the guess letter to the server
+    /**
+     * Send the client's guess to the server
+     * @param guess The guess letter or word of the client
+     * @return String The message about the result of the guess (correct, incorrect, or win/lose)
+     */
     public String sendGuess(String guess) {
         String message = "";
         try {
@@ -111,7 +142,10 @@ public class Client {
         }
     }
 
-    // Get winning condition of the game
+    /**
+     * Get winning condition of the game
+     * @return String The message about the winning condition of the game (win, lose, or continue)
+     */
     public String isWin() {
         String message = "";
         try {
@@ -124,7 +158,9 @@ public class Client {
         }
     }
 
-    // Disconnect from the server
+    /**
+     * Disconnect from the server, close socket
+     */
     public void closeClient() {
         try {
             dataOutputStream.writeUTF("CLOSE");

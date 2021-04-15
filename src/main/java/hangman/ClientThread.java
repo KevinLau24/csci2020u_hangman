@@ -1,13 +1,17 @@
 package hangman;
 
-import javafx.scene.paint.Color;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Locale;
+
+/**
+ * @author Thinh Le
+ * <h1>ClientThread</h1>
+ * <p>This class implements the client connection handler
+ * The server connects with each client on its own connection handler thread</p>
+ */
 
 public class ClientThread extends Thread {
     protected Socket socket = null;
@@ -20,6 +24,14 @@ public class ClientThread extends Thread {
 
     protected int MAX_GUESSES = 6;
 
+    /**
+     * Create the connection thread between client and server
+     * @param socket The client socket
+     * @param targetWord The shared target word from the server
+     * @param currentWord The shared current state of target word from the server
+     * @param numGuesses The shared number of guesses from the server
+     * @param guessedChar The shared list of all guessed letters from the server
+     */
     public ClientThread(Socket socket, String targetWord, String currentWord, int numGuesses, ArrayList<String> guessedChar) {
         super();
         this.socket = socket;
@@ -35,6 +47,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Run the thread. When this function ends, the thread ends, connection is destroyed
+     */
     public void run() {
         boolean endOfSession = false;
         // If endOfSession is true, break while loop and disconnect
@@ -52,6 +67,12 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handle all of the commands and features requested by the client
+     * @return boolean True if the request is closing the connection
+     * or error in reading from the client, False for other features
+     * @throws IOException
+     */
     public boolean processCommand() throws IOException {
         synchronized (this) {
             String command = null;
