@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Thinh Le, Kenneth Tse
+ * @author Thinh Le, Kenneth Tse, Kevin Lau
  * <h1>Server</h1>
  * <p>This class implements the server of the game application</p>
  */

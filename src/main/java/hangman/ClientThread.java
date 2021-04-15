@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * @author Thinh Le
+ * @author Thinh Le, Kevin Lau
  * <h1>ClientThread</h1>
  * <p>This class implements the client connection handler
  * The server connects with each client on its own connection handler thread</p>

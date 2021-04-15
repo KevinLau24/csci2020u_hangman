@@ -8,10 +8,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
- * @author Thinh Le, Kenneth Tse, Kevin Lau, John Tovera
+ * @author Thinh Le
  * <h1>Client</h1>
- * <p>This class implements the client object handles the backend features
- * to connect with the server</p>
+ * <p>This class implements the client object handling the backend features
+ * for connecting with the server</p>
  */
 
 public class Client {
